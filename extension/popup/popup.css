@@ -1,0 +1,21 @@
+body {
+    width: 200px;
+    padding: 20px;
+    background: linear-gradient(90deg, #000000 90%, #800080 10%);
+    color: white;
+}
+
+#toggleFilter {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: #333;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#toggleFilter:hover {
+    background: #444;
+}
