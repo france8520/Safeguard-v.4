@@ -1,0 +1,2 @@
+{"timestamp":12130,"category":"browser.usage","name":"interaction","extra":{"source":"tabs-bar","widget_id":"cmd-closeWindow","glean_timestamp":"1730441408974","flow_id":"{62d02c02-99b6-43bf-b0c5-4d9451d5305f}"}}
+{"timestamp":2371,"category":"glean","name":"restarted","extra":{"glean.startup.date":"2024-11-01T13:10+07:00","glean_timestamp":"1730441419790"},"execution_counter":1}

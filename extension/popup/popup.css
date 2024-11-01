@@ -1,3 +1,21 @@
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 5px;
+}
+
+h1 {
+    margin: 0;
+    font-family: 'Orbitron', sans-serif;
+    color: white;
+    font-size: 18px;
+    text-shadow: 0 0 10px #800080;
+}
 body {
     width: 200px;
     padding: 20px;
