@@ -1,12 +1,24 @@
+body {
+    width: 300px;
+    padding: 20px;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d1f3d 100%);
+    color: white;
+    font-family: 'Inter', sans-serif;
+}
+
 .header {
-    text-align: center;
-    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
 .icon {
     width: 48px;
     height: 48px;
-    margin-bottom: 5px;
+    filter: drop-shadow(0 0 8px rgba(128,0,128,0.6));
 }
 
 h1 {
@@ -15,12 +27,6 @@ h1 {
     color: white;
     font-size: 18px;
     text-shadow: 0 0 10px #800080;
-}
-body {
-    width: 200px;
-    padding: 20px;
-    background: linear-gradient(90deg, #000000 90%, #800080 10%);
-    color: white;
 }
 
 #toggleFilter {
@@ -38,38 +44,40 @@ body {
     background: #444;
 }
 
+.stats-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.stat-card {
+    background: rgba(255,255,255,0.1);
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+}
+
 .mode-selector {
-    width: 180px;
-    height: 90px;
-    background: #333;
-    border-radius: 90px 90px 0 0;
-    position: relative;
-    overflow: hidden;
+    background: rgba(255,255,255,0.05);
+    border-radius: 15px;
+    padding: 15px;
+    margin-top: 20px;
 }
 
-.selector-needle {
-    width: 2px;
-    height: 80px;
-    background: #fff;
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform-origin: bottom center;
-    transition: transform 0.3s;
-}
-
-.mode-labels {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-}
-
-.mode-label {
-    position: absolute;
-    color: white;
+.mode-option {
+    display: flex;
+    align-items: center;
+    padding: 10px;
     cursor: pointer;
+    border-radius: 8px;
+    transition: background 0.3s;
 }
 
-.mode-label.disable { left: 10px; top: 40px; }
-.mode-label.change { left: 50%; top: 10px; transform: translateX(-50%); }
-.mode-label.blur { right: 10px; top: 40px; }
+.mode-option:hover {
+    background: rgba(128,0,128,0.2);
+}
+
+.mode-option.active {
+    background: rgba(128,0,128,0.4);
+}

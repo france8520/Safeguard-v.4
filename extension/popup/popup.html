@@ -2,20 +2,35 @@
 <html>
 <head>
     <link rel="stylesheet" href="popup.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="header">
-        <img src="../icons/icon.png" class="icon">
-        <h1>Safeguard</h1>
+        <img src="../icons/icon48.png" class="icon">
+        <h1>Advance Safeguard</h1>
+    </div>
+
+    <div class="stats-container">
+        <div class="stat-card">
+            <div id="words-filtered">0</div>
+            <div class="stat-label">Words Filtered</div>
+        </div>
+        <div class="stat-card">
+            <div id="pages-protected">0</div>
+            <div class="stat-label">Pages Protected</div>
+        </div>
     </div>
     <div class="mode-selector">
-        <div class="selector-needle"></div>
-        <div class="mode-labels">
-            <div class="mode-label disable">Disable</div>
-            <div class="mode-label change">Change</div>
-            <div class="mode-label blur">Blur</div>
+        <div class="mode-option" data-mode="delete">
+            <span>🗑️ Delete Mode</span>
         </div>
+        <div class="mode-option" data-mode="replace">
+            <span>🔄 Replace Mode</span>
+        </div>
+        <div class="mode-option" data-mode="disable">
+            <span>⏸️ Disabled</span>
+        </div>
+        <div class="mode-indicator"></div>
     </div>
     <script src="popup.js"></script>
 </body>

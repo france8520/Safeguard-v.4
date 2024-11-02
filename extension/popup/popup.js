@@ -1,42 +1,53 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const selector = document.querySelector('.mode-selector');
-    const needle = document.querySelector('.selector-needle');
-    let currentMode = 'blur';
+    const stats = {
+        wordsFiltered: 0,
+        pagesProtected: 0
+    };
 
-    selector.addEventListener('click', function(e) {
-        const rect = selector.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        // Calculate angle and set mode
-        const angle = Math.atan2(x - rect.width/2, rect.height - y) * 180/Math.PI;
-        
-        if (angle < -60) {
-            currentMode = 'disable';
-            needle.style.transform = 'rotate(-75deg)';
-        } else if (angle > 60) {
-            currentMode = 'blur';
-            needle.style.transform = 'rotate(75deg)';
-        } else {
-            currentMode = 'change';
-            needle.style.transform = 'rotate(0deg)';
-        }
+    function updateStats() {
+        chrome.storage.local.get(['stats'], function(result) {
+            if (result.stats) {
+                Object.assign(stats, result.stats);
+                document.getElementById('words-filtered').textContent = stats.wordsFiltered;
+                document.getElementById('pages-protected').textContent = stats.pagesProtected;
+            }
+        });
+    }
 
+    // Add click handlers for each mode option
+    document.querySelectorAll('.mode-option').forEach(option => {
+        option.addEventListener('click', () => {
+            const mode = option.dataset.mode;
+            updateMode(mode);
+            
+            // Send message to content script
+            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                chrome.tabs.sendMessage(tabs[0].id, {
+                    action: 'filter',
+                    mode: mode,
+                    enabled: mode !== 'disable'
+                });
+            });
+        });
+    });
+
+    function updateMode(mode) {
         chrome.storage.local.set({ 
-            enabled: currentMode !== 'disable',
-            mode: currentMode 
+            enabled: mode !== 'disable',
+            mode: mode 
         });
 
-        chrome.tabs.reload();
+        document.querySelectorAll('.mode-option').forEach(el => {
+            el.classList.toggle('active', el.dataset.mode === mode);
+        });
+    }
+
+    // Initialize mode selector
+    chrome.storage.local.get(['mode'], function(result) {
+        updateMode(result.mode || 'blur');
     });
 
-    // Set initial position
-    chrome.storage.local.get(['mode'], function(result) {
-        currentMode = result.mode || 'blur';
-        switch(currentMode) {
-            case 'disable': needle.style.transform = 'rotate(-75deg)'; break;
-            case 'change': needle.style.transform = 'rotate(0deg)'; break;
-            case 'blur': needle.style.transform = 'rotate(75deg)'; break;
-        }
-    });
+    // Update stats every 5 seconds
+    updateStats();
+    setInterval(updateStats, 5000);
 });
