@@ -2,35 +2,25 @@
 <html>
 <head>
     <link rel="stylesheet" href="popup.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="header">
-        <img src="../icons/icon48.png" class="icon">
-        <h1>Advance Safeguard</h1>
-    </div>
-
-    <div class="stats-container">
-        <div class="stat-card">
-            <div id="words-filtered">0</div>
-            <div class="stat-label">Words Filtered</div>
+    <div class="row">
+        <div class="header" style="margin-top: 40%;">
+            <img src="../icons/icon.png" class="icon">
+            <h1>Safeguard</h1>
         </div>
-        <div class="stat-card">
-            <div id="pages-protected">0</div>
-            <div class="stat-label">Pages Protected</div>
+        <div class="wrapper">
+            <div class="knob">
+                <div class="label label-top">Replace</div>
+                <div class="label label-l">Disable</div>
+                <div class="knob_inner" id="knob-inner">
+                    <div class="knob_inner_pointer" id="knob-pointer"></div>
+                </div>
+                <div class="label label-r">Delete</div>
+            </div>
+            <div class="current-value" id="current-value">Replace</div>
         </div>
-    </div>
-    <div class="mode-selector">
-        <div class="mode-option" data-mode="delete">
-            <span>🗑️ Delete Mode</span>
-        </div>
-        <div class="mode-option" data-mode="replace">
-            <span>🔄 Replace Mode</span>
-        </div>
-        <div class="mode-option" data-mode="disable">
-            <span>⏸️ Disabled</span>
-        </div>
-        <div class="mode-indicator"></div>
     </div>
     <script src="popup.js"></script>
 </body>

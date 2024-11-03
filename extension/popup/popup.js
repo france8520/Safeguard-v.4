@@ -1,53 +1,72 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const stats = {
-        wordsFiltered: 0,
-        pagesProtected: 0
-    };
+    const knobInner = document.getElementById('knob-inner');
+    const knobPointer = document.getElementById('knob-pointer');
+    const currentValueDisplay = document.getElementById('current-value');
 
-    function updateStats() {
-        chrome.storage.local.get(['stats'], function(result) {
-            if (result.stats) {
-                Object.assign(stats, result.stats);
-                document.getElementById('words-filtered').textContent = stats.wordsFiltered;
-                document.getElementById('pages-protected').textContent = stats.pagesProtected;
-            }
-        });
+    let currentAngle = 0;
+    let mouseIsDown = false;
+    let startY = 0;
+
+    // Adjust clamp values for smaller circle
+    function clamp(value, max, min) {
+        return Math.max(min, Math.min(max, value));
     }
 
-    // Add click handlers for each mode option
-    document.querySelectorAll('.mode-option').forEach(option => {
-        option.addEventListener('click', () => {
-            const mode = option.dataset.mode;
-            updateMode(mode);
-            
-            // Send message to content script
-            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-                chrome.tabs.sendMessage(tabs[0].id, {
-                    action: 'filter',
-                    mode: mode,
-                    enabled: mode !== 'disable'
-                });
+    function updateMode(angle) {
+        let currentMode;
+
+        if (angle > 30) { // Reduced angle threshold
+            currentMode = 'Delete';
+        } else if (angle < -30) { // Reduced angle threshold
+            currentMode = 'Disable';
+        } else {
+            currentMode = 'Replace';
+        }
+
+        currentValueDisplay.textContent = currentMode;
+
+        chrome.storage.local.set({
+            enabled: currentMode !== 'Disable',
+            mode: currentMode.toLowerCase()
+        });
+
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            chrome.tabs.sendMessage(tabs[0].id, {
+                action: 'filter',
+                mode: currentMode.toLowerCase(),
+                enabled: currentMode !== 'Disable'
             });
         });
-    });
-
-    function updateMode(mode) {
-        chrome.storage.local.set({ 
-            enabled: mode !== 'disable',
-            mode: mode 
-        });
-
-        document.querySelectorAll('.mode-option').forEach(el => {
-            el.classList.toggle('active', el.dataset.mode === mode);
-        });
     }
 
-    // Initialize mode selector
-    chrome.storage.local.get(['mode'], function(result) {
-        updateMode(result.mode || 'blur');
+    function rotateKnob(angle) {
+        knobInner.style.transform = `rotate(${angle}deg)`;
+        updateMode(angle);
+    }
+
+    knobInner.addEventListener("mousedown", (e) => {
+        startY = e.pageY;
+        mouseIsDown = true;
     });
 
-    // Update stats every 5 seconds
-    updateStats();
-    setInterval(updateStats, 5000);
+    document.addEventListener("mouseup", () => {
+        mouseIsDown = false;
+    });
+
+    knobInner.addEventListener("mousemove", (e) => {
+        if (mouseIsDown) {
+            const distance = clamp(startY - e.pageY, 60, -60); // Reduced movement range
+            currentAngle = distance * 1.5; // Reduced rotation multiplier
+            rotateKnob(currentAngle);
+        }
+    });
+
+    chrome.storage.local.get(['mode'], function(result) {
+        switch (result.mode) {
+            case 'disable': currentAngle = -45; break; // Reduced angles
+            case 'delete': currentAngle = 45; break;
+            default: currentAngle = 0; break;
+        }
+        rotateKnob(currentAngle);
+    });
 });
